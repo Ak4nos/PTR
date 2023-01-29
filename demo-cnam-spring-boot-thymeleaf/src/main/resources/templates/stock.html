@@ -65,7 +65,7 @@
             <tr th:each="stock : ${stock}">
                 <th scope="row">[[${stock.id}]]</th>
                 <td>[[${stock.produitRef.nomProduit}]]</td>
-                <td>[[${stock.categories.designation}]]</td>
+                <td>[[${stock.produitRef.categories.designation}]]</td>
                 <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
                 <td>[[${stock.datePeremption}]]</td>
                 <td>[[${stock.statut}]]</td>
@@ -126,7 +126,7 @@
       $("#btnClear").on("click", function (e) {
         e.preventDefault();
         $("#keyword").text("");
-        window.location = "[[@{/produitRef}]]";
+        window.location = "[[@{/stock}]]";
       });
     });
   </script>

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -62,12 +63,13 @@ public class StockController {
     public String addProduitStock(Model model) {
 
         List<ProduitRef> listProduitRef = produitRefRepository.findAll();
+        List<Categories> listCategories = categoriesRepository.findAll();
 
         Stock stock = new Stock();
-        stock.setStatut(Statut.EN_COURS);
 
         model.addAttribute("stock", stock);
         model.addAttribute("listProduitRef", listProduitRef);
+        model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Création de produit de référence");
 
         return "stock_form";
@@ -78,11 +80,14 @@ public class StockController {
         //List<ProduitRef> listProduitRef = produitRefRepository.findAll();
 
         try {
-            //LocalDateTime dateFabrication = LocalDateTime.now();
-            //Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
             stock.setDateFabrication(new Date());
-            //Date datePeremption = new Date();
-            stock.setDatePeremption(new Date());
+            Date datePeremption = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(datePeremption);
+            c.add(Calendar.HOUR, stock.getProduitRef().getTempsConservation());
+            Date currentDatePlusPeremption = c.getTime();
+            stock.setDatePeremption(currentDatePlusPeremption);
 
             stockrepository.save(stock);
 
