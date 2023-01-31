@@ -15,11 +15,9 @@ public class Stock {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_fabrication", nullable = false)
     private Date dateFabrication;
 
-    //Temporal(TemporalType.TIMESTAMP)
     @Column(name ="date_peremption", nullable = false)
     private Date datePeremption;
 

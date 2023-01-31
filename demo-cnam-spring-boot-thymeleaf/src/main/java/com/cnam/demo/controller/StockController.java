@@ -70,7 +70,7 @@ public class StockController {
         model.addAttribute("stock", stock);
         model.addAttribute("listProduitRef", listProduitRef);
         model.addAttribute("listCategories", listCategories);
-        model.addAttribute("pageTitle", "Création de produit de référence");
+        model.addAttribute("pageTitle", "Ajout d'un produit en stock");
 
         return "stock_form";
     }
@@ -120,7 +120,7 @@ public class StockController {
             model.addAttribute("statut", statut);
             model.addAttribute("listProduitRef", listProduitRef);
             model.addAttribute("listCategories", listCategories);
-            model.addAttribute("pageTitle", "Modifier le produit de référence (ID: " + id + ")");
+            model.addAttribute("pageTitle", "Modifier le statut du produit de référence (ID: " + id + ")");
 
             return "stock_form";
         } catch (Exception e) {
@@ -131,7 +131,7 @@ public class StockController {
     }
 
     @GetMapping("/stock/delete/{id}")
-    public String deleteProduitStock(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteProduitStock(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             stockrepository.deleteById(id);
 
