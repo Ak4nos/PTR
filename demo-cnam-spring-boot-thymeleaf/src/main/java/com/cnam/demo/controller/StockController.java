@@ -77,7 +77,6 @@ public class StockController {
 
     @PostMapping("/stock/save")
     public String saveProduitStock(Stock stock,  RedirectAttributes redirectAttributes) {
-        //List<ProduitRef> listProduitRef = produitRefRepository.findAll();
 
         try {
 
@@ -88,8 +87,24 @@ public class StockController {
             c.add(Calendar.HOUR, stock.getProduitRef().getTempsConservation());
             Date currentDatePlusPeremption = c.getTime();
             stock.setDatePeremption(currentDatePlusPeremption);
+            stock.setStatut(Statut.EN_COURS);
+            stockrepository.save(stock);
+
+            redirectAttributes.addFlashAttribute("message", "The Product has been saved successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addAttribute("message", e.getMessage());
+        }
+
+        return "redirect:/stock";
+    }
+
+    @PostMapping("/stock/saveEdit")
+    public String saveProduitStockEdit(Stock stock, RedirectAttributes redirectAttributes) {
+
+        try {
 
             stockrepository.save(stock);
+
 
             redirectAttributes.addFlashAttribute("message", "The Product has been saved successfully!");
         } catch (Exception e) {
@@ -109,20 +124,18 @@ public class StockController {
     @GetMapping("/stock/{id}")
     public String editProduitStock(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
-            List<ProduitRef> listProduitRef = produitRefRepository.findAll();
-            List<Categories> listCategories = categoriesRepository.findAll();
-            List<Statut> statut = new ArrayList<Statut>();
 
-
+            //List<Statut> statut = new ArrayList<>();
+            String statut = String.valueOf(Statut.values());
             Stock stock = stockrepository.findById(id).get();
 
             model.addAttribute("stock", stock);
             model.addAttribute("statut", statut);
-            model.addAttribute("listProduitRef", listProduitRef);
-            model.addAttribute("listCategories", listCategories);
+            //stockrepository.metAJourStatut(statut, id);
+
             model.addAttribute("pageTitle", "Modifier le statut du produit de référence (ID: " + id + ")");
 
-            return "stock_form";
+            return "stock_form_edit";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 
