@@ -23,7 +23,7 @@ public class Stock {
 
     @Column (name="statut")
     @Enumerated (EnumType.STRING)
-    private Statut statut;
+    private Statut statut = Statut.EN_COURS;
 
     @ManyToOne
     @JoinColumn(name = "produitRef_id")

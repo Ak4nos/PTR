@@ -19,10 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class StockController {
@@ -87,7 +84,6 @@ public class StockController {
             c.add(Calendar.HOUR, stock.getProduitRef().getTempsConservation());
             Date currentDatePlusPeremption = c.getTime();
             stock.setDatePeremption(currentDatePlusPeremption);
-            stock.setStatut(Statut.EN_COURS);
             stockrepository.save(stock);
 
             redirectAttributes.addFlashAttribute("message", "The Product has been saved successfully!");
@@ -102,6 +98,7 @@ public class StockController {
     public String saveProduitStockEdit(Stock stock, RedirectAttributes redirectAttributes) {
 
         try {
+
 
             stockrepository.save(stock);
 
@@ -125,14 +122,18 @@ public class StockController {
     public String editProduitStock(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
 
-            //List<Statut> statut = new ArrayList<>();
-            String statut = String.valueOf(Statut.values());
+            //List<ProduitRef> listProduitRef = produitRefRepository.findAll();
+            //List<Categories> listCategories = categoriesRepository.findAll();
+            //List<Statut> listStatut = new ArrayList<Statut>();
+
+
             Stock stock = stockrepository.findById(id).get();
 
-            model.addAttribute("stock", stock);
-            model.addAttribute("statut", statut);
-            //stockrepository.metAJourStatut(statut, id);
 
+            model.addAttribute("stock", stock);
+//            model.addAttribute("listStatut", listStatut);
+//            model.addAttribute("listProduitRef", listProduitRef);
+//            model.addAttribute("listCategories", listCategories);
             model.addAttribute("pageTitle", "Modifier le statut du produit de référence (ID: " + id + ")");
 
             return "stock_form_edit";

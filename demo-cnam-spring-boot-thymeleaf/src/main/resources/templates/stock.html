@@ -48,7 +48,7 @@
         </form>
     </div>
 
-    <!-- variale inseree dans Modele depuis le controler -->
+    <!-- variable inseree dans Modele depuis le controler -->
     <div th:if="${stock.size() > 0}">
         <table class="table table-hover table-responsive-xl">
             <thead class="thead-light">
@@ -62,12 +62,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="stock : ${stock}">
+            <tr  th:each="stock : ${stock}"  >
                 <th scope="row">[[${stock.id}]]</th>
                 <td>[[${stock.produitRef.nomProduit}]]</td>
                 <td>[[${stock.produitRef.categories.designation}]]</td>
                 <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
-                <td>[[${stock.datePeremption}]]</td>
+                <span ></span>
+                <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">[[${stock.datePeremption}]]</td>
+                <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
                 <td>[[${stock.statut}]]</td>
 
                 <td>
@@ -129,6 +131,7 @@
         window.location = "[[@{/stock}]]";
       });
     });
-  </script>
+    var maintenant = new Date();
+</script>
 </body>
 </html>
