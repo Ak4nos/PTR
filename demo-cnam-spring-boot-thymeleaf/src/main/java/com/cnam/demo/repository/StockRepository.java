@@ -17,7 +17,5 @@ import java.util.List;
 @Transactional
 public interface StockRepository extends JpaRepository<Stock, Integer> {
 
-    @Query ("update Stock s set s.statut = :statut where s.id = :id")
-    @Modifying
-    void metAJourStatut(@Param("statut") String statut, @Param("id") Integer id);
+
 }

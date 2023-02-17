@@ -1,25 +1,25 @@
 package com.cnam.demo.controller;
 
 
-import com.cnam.demo.entity.Categories;
 import com.cnam.demo.entity.ProduitRef;
 import com.cnam.demo.entity.Statut;
 import com.cnam.demo.entity.Stock;
-import com.cnam.demo.repository.CategoriesRepository;
 import com.cnam.demo.repository.ProduitRefRepository;
 import com.cnam.demo.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Timestamp;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class StockController {
@@ -28,8 +28,7 @@ public class StockController {
     private StockRepository stockrepository;
     @Autowired
     private ProduitRefRepository produitRefRepository;
-    @Autowired
-    private CategoriesRepository categoriesRepository;
+
 
 
     @GetMapping("/stock")
@@ -38,7 +37,6 @@ public class StockController {
             List<Stock> stock = new ArrayList<Stock>();
 
             List<ProduitRef> produitRef = new ArrayList<ProduitRef>();
-            List<Categories> categories = new ArrayList<Categories>();
             if (keyword == null) {
                 stockrepository.findAll().forEach(stock::add);
             } else {
@@ -48,7 +46,6 @@ public class StockController {
             model.addAttribute("stock", stock);
 
             model.addAttribute("produitRef", produitRef);
-            model.addAttribute("categories", categories);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -60,13 +57,11 @@ public class StockController {
     public String addProduitStock(Model model) {
 
         List<ProduitRef> listProduitRef = produitRefRepository.findAll();
-        List<Categories> listCategories = categoriesRepository.findAll();
 
         Stock stock = new Stock();
 
         model.addAttribute("stock", stock);
         model.addAttribute("listProduitRef", listProduitRef);
-        model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Ajout d'un produit en stock");
 
         return "stock_form";
@@ -77,7 +72,7 @@ public class StockController {
 
         try {
 
-            stock.setDateFabrication(new Date());
+            stock.setDateFabrication (new Date());
             Date datePeremption = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(datePeremption);
@@ -85,7 +80,6 @@ public class StockController {
             Date currentDatePlusPeremption = c.getTime();
             stock.setDatePeremption(currentDatePlusPeremption);
             stockrepository.save(stock);
-
             redirectAttributes.addFlashAttribute("message", "The Product has been saved successfully!");
         } catch (Exception e) {
             redirectAttributes.addAttribute("message", e.getMessage());
@@ -94,10 +88,11 @@ public class StockController {
         return "redirect:/stock";
     }
 
-    @PostMapping("/stock/saveEdit")
+   @PostMapping("/stock/saveEdit")
     public String saveProduitStockEdit(Stock stock, RedirectAttributes redirectAttributes) {
 
         try {
+
 
 
             stockrepository.save(stock);
@@ -122,21 +117,18 @@ public class StockController {
     public String editProduitStock(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
 
-            //List<ProduitRef> listProduitRef = produitRefRepository.findAll();
-            //List<Categories> listCategories = categoriesRepository.findAll();
-            //List<Statut> listStatut = new ArrayList<Statut>();
+            List<ProduitRef> listProduitRef = produitRefRepository.findAll();
+            List<Statut> statut = new ArrayList<Statut>();
 
 
             Stock stock = stockrepository.findById(id).get();
-
-
             model.addAttribute("stock", stock);
-//            model.addAttribute("listStatut", listStatut);
-//            model.addAttribute("listProduitRef", listProduitRef);
-//            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("statut", statut);
+            model.addAttribute("listProduitRef", listProduitRef);
             model.addAttribute("pageTitle", "Modifier le statut du produit de référence (ID: " + id + ")");
 
             return "stock_form_edit";
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
 

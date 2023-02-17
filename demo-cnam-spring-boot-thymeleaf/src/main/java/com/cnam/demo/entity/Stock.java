@@ -1,6 +1,8 @@
 package com.cnam.demo.entity;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -16,9 +18,11 @@ public class Stock {
     private Integer id;
 
     @Column(name = "date_fabrication", nullable = false)
+    @DateTimeFormat//(pattern = "yyyy-MM-dd")
     private Date dateFabrication;
 
     @Column(name ="date_peremption", nullable = false)
+    @DateTimeFormat//(pattern = "yyyy-MM-dd")
     private Date datePeremption;
 
     @Column (name="statut")
@@ -28,10 +32,6 @@ public class Stock {
     @ManyToOne
     @JoinColumn(name = "produitRef_id")
     private ProduitRef produitRef;
-
-    @ManyToOne
-    @JoinColumn(name = "categories_id")
-    private Categories categories;
 
 
     public Stock() {
@@ -44,7 +44,6 @@ public class Stock {
         this.dateFabrication = dateFabrication;
         this.datePeremption = datePeremption;
         this.produitRef = produitRef;
-        this.categories = categories;
         this.statut = statut;
     }
 
@@ -80,13 +79,6 @@ public class Stock {
         this.produitRef = produitRef;
     }
 
-    public Categories getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Categories categories) {
-        this.categories = categories;
-    }
 
 
     public Statut getStatut() {
@@ -105,7 +97,6 @@ public class Stock {
                 ", datePeremption=" + datePeremption +
                 ", statut=" + statut +
                 ", produitRef=" + produitRef +
-                ", categories=" + categories +
                 '}';
     }
 }

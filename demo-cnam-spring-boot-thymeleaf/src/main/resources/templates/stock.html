@@ -67,7 +67,6 @@
                 <td>[[${stock.produitRef.nomProduit}]]</td>
                 <td>[[${stock.produitRef.categories.designation}]]</td>
                 <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
-                <span ></span>
                 <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">[[${stock.datePeremption}]]</td>
                 <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
                 <td>[[${stock.statut}]]</td>

@@ -14,21 +14,27 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div class="container-fluid">
-    <h2 class="text-center">[[${pageTitle}]]</h2>
+    <h2 class="text-center">[[${pageTitle}]] </h2>
+
+
 
     <div class="my-3">
         <form th:action="@{/stock/saveEdit}" method="post" enctype="multipart/form-data" th:object="${stock}"
               style="max-width: 550px; margin: 0 auto">
 
             <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{dateFabrication}" />
+            <input type="hidden" th:field="*{datePeremption}" />
+            <input type="hidden" th:field="*{produitRef}" />
+
 
             <div class="p-3">
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="listStatut">Statut du produit</label>
+                    <label class="col-sm-3 col-form-label" for="statut">Statut du produit</label>
                     <div class="col-sm-9">
                         <select th:field="*{statut}" name="id" class="form-control" required>
                             <th:block th:each="statutOpt : ${T(com.cnam.demo.entity.Statut).values()}">
-                                <option th:text="${statutOpt}" th:value="${statutOpt}"  id="listStatut"/>
+                                <option th:text="${statutOpt}" th:value="${statutOpt}"  id="statut"/>
                             </th:block>
                         </select>
                     </div>
