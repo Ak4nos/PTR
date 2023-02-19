@@ -17,5 +17,5 @@ import java.util.List;
 @Transactional
 public interface StockRepository extends JpaRepository<Stock, Integer> {
 
-
+    //List <Stock> findByStatutContainingIgnoreCase(String keyword);
 }
