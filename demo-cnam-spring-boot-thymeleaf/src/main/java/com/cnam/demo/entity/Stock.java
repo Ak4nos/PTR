@@ -4,8 +4,6 @@ package com.cnam.demo.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -18,11 +16,11 @@ public class Stock {
     private Integer id;
 
     @Column(name = "date_fabrication", nullable = false)
-    @DateTimeFormat//(pattern = "yyyy-MM-dd")
+    @DateTimeFormat
     private Date dateFabrication;
 
     @Column(name ="date_peremption", nullable = false)
-    @DateTimeFormat//(pattern = "yyyy-MM-dd")
+    @DateTimeFormat
     private Date datePeremption;
 
     @Column (name="statut")

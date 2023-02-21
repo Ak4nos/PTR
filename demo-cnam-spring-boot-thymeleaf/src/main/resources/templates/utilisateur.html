@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
-    <title>Produits en stock</title>
+    <title>Page des utilisateurs</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
@@ -19,7 +19,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
-    <h2 class="text-center">Stock de produit</h2>
+    <h2 class="text-center">Utilisateurs</h2>
 
     <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
          role="alert">
@@ -31,13 +31,13 @@
 
     <!--  Formulaire de recherche -->
     <div class="my-3">
-        <form th:action="@{/stock}">
+        <form th:action="@{/utilisateur}">
             <div class="row d-flex">
                 <div class="col-md-6 mt-2">
                     <div class="search">
                         <i class="fa fa-search"></i>
                         <input id="keyword" type="search" name="keyword" th:value="${keyword}" required class="form-control"
-                               placeholder="Saisissez une date (format yyyy-mm-dd)">
+                               placeholder="Saisissez un nom">
                         <button type="submit" class="btn btn-secondary">Chercher</button>
                     </div>
                 </div>
@@ -49,42 +49,40 @@
     </div>
 
     <!-- variable inseree dans Modele depuis le controler -->
-    <div th:if="${stock.size() > 0}">
+    <div th:if="${utilisateur.size() > 0}">
         <table class="table table-hover table-responsive-xl">
             <thead class="thead-light">
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Nom du Produit</th>
-                <th scope="col">Catégorie du Produit</th>
-                <th scope="col">Date de fabrication</th>
-                <th scop="col">Date de péremption</th>
-                <th scope="col">Statut</th>
-                <th scope="col">Editer</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Login</th>
+                <th scop="col">Adresse mail</th>
+                <th scope="col">Rôle</th>
             </tr>
             </thead>
             <tbody>
-            <tr  th:each="stock : ${stock}"  >
-                <th scope="row">[[${stock.id}]]</th>
-                <td>[[${stock.produitRef.nomProduit}]]</td>
-                <td>[[${stock.produitRef.categories.designation}]]</td>
-                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
-                <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">[[${stock.datePeremption}]]</td>
-                <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
-                <td>[[${stock.statut}]]</td>
+            <tr  th:each="utilisateur : ${utilisateur}"  >
+                <th scope="row">[[${utilisateur.id}]]</th>
+                <td>[[${utilisateur.nom}]]</td>
+                <td>[[${utilisateur.prenom}]]</td>
+                <td>[[${utilisateur.login}]]</td>
+                <td>[[${utilisateur.adresseMail}]]</td>
+                <td>[[${utilisateur.role}]]</td>
 
                 <td>
-                    <a th:href="@{'/stock/' + ${stock.id}}" title="Edit this stock's product"
+                    <a th:href="@{'/utilisateur/' + ${utilisateur.id}}" title="Edit this user"
                        class="fa-regular fa-pen-to-square icon-dark"></a>
                     &nbsp;
-                    <a th:href="@{'/stock/delete/' + ${stock.id}}" th:stockDesignation="${stock.produitRef.nomProduit}" id="btnDelete"
-                       title="Delete this stock's product" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                    <a th:href="@{'/utilisateur/delete/' + ${utilisateur.id}}" th:utilisateurDesignation="${utilisateur.nom}" id="btnDelete"
+                       title="Delete this user" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="" th:unless="${stock.size() > 0}">
+    <div class="" th:unless="${utilisateur.size() > 0}">
         <span>No product found!</span>
     </div>
 </div>
@@ -119,16 +117,16 @@
         e.preventDefault();
         link = $(this);
 
-        stockDesignation = link.attr("stockDesignation");
+        utilisateurDesignation = link.attr("stockDesignation");
         $("#yesBtn").attr("href", link.attr("href"));
-        $("#confirmText").html("Voulez-vous supprimer le produit \<strong\>" + stockDesignation + "\<\/strong\>?");
+        $("#confirmText").html("Voulez-vous supprimer le produit \<strong\>" + utilisateurDesignation + "\<\/strong\>?");
         $("#confirmModal").modal();
       });
 
       $("#btnClear").on("click", function (e) {
         e.preventDefault();
         $("#keyword").text("");
-        window.location = "[[@{/stock}]]";
+        window.location = "[[@{/utilisateur}]]";
       });
     });
 

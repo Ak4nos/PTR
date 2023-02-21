@@ -1,6 +1,7 @@
 package com.cnam.demo.controller;
 
 import com.cnam.demo.entity.ProduitRef;
+import com.cnam.demo.entity.Statut;
 import com.cnam.demo.entity.Stock;
 import com.cnam.demo.repository.ProduitRefRepository;
 import com.cnam.demo.repository.StockRepository;
@@ -27,15 +28,13 @@ public class homeController {
             List<Stock> stock = new ArrayList<Stock>();
 
             List<ProduitRef> produitRef = new ArrayList<ProduitRef>();
-            if (keyword == null) {
-                stockrepository.findAll().forEach(stock::add);
-            } else {
-                //stockrepository.findByStatutContainingIgnoreCase(keyword).forEach(stock::add);
-                model.addAttribute("keyword", keyword);
-            }
-            model.addAttribute("stock", stock);
+            List<Statut> statut = new ArrayList<>();
 
-            model.addAttribute("produitRef", produitRef);
+                stockrepository.findByStatut(Statut.EN_COURS).forEach(stock::add);
+
+                //stockrepository.findAll().forEach(stock::add);
+
+            model.addAttribute("stock", stock);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }

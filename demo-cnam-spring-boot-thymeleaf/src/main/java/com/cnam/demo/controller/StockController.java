@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +20,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Classe controller pour la page stock
+ */
 @Controller
 public class StockController {
 
@@ -29,10 +31,15 @@ public class StockController {
     @Autowired
     private ProduitRefRepository produitRefRepository;
 
-
+    /**
+     * Classe qui capte la méthode gett de la page stock et affiche le stock
+     * @param model sert à stocker l'entité stock afin d'exploiter l'entité
+     * @param keyword sert à réaliser une recherche par date
+     * @return
+     */
 
     @GetMapping("/stock")
-    public String getAllStock(Model model, @Param("keyword") String keyword) {
+    public String getAllStock(Model model, @Param("keyword") Date keyword) {
         try {
             List<Stock> stock = new ArrayList<Stock>();
 
@@ -40,18 +47,21 @@ public class StockController {
             if (keyword == null) {
                 stockrepository.findAll().forEach(stock::add);
             } else {
-                //produitRefRepository.findByNomProduitContainingIgnoreCase(keyword).forEach(stock::add);
+                stockrepository.findByDateFabrication(keyword).forEach(stock::add);
                 model.addAttribute("keyword", keyword);
             }
-            model.addAttribute("stock", stock);
 
-            model.addAttribute("produitRef", produitRef);
+                model.addAttribute("stock", stock);
+
+                model.addAttribute("produitRef", produitRef);
+
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
 
         return "stock";
     }
+
 
     @GetMapping("/stock/new")
     public String addProduitStock(Model model) {

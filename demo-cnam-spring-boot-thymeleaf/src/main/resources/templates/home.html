@@ -34,12 +34,11 @@
             </tr>
             </thead>
             <tbody>
-
-            <tr  th:each="stock : ${stock}"  >
-                <th scope="row">[[${stock.id}]]</th>
+            <tr  th:each="stock : ${stock}">
+                <th scope="row" >[[${stock.id}]]</th>
                 <td>[[${stock.produitRef.nomProduit}]]</td>
                 <td>[[${stock.produitRef.categories.designation}]]</td>
-                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
+                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy hh:mm:ss')}]]</td>
                 <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">&#9888;[[${stock.datePeremption}]] A traité</td>
                 <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
                 <td>[[${stock.statut}]]</td>
