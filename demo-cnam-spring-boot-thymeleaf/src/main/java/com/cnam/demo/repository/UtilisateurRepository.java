@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 @Transactional
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer> {
-    List<Utilisateur> findByRole (String keyword);
+    List<Utilisateur> findByNom (String keyword);
 
 }

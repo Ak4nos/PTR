@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
-    <title>Produits en stock</title>
+    <title>Historique</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
@@ -16,11 +15,12 @@
 
 </head>
 <body>
+
 <div th:replace="fragments/header_stock :: header_stock"></div>
 
 <div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
-    <h2 class="text-center">Stock de produit</h2>
 
+    <h2 class="text-center">Historique du stock</h2>
     <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
          role="alert">
         [[${message}]]
@@ -28,29 +28,26 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
     <!--  Formulaire de recherche -->
     <div class="my-3">
-        <form th:action="@{/stock}">
+        <form th:action="@{/historique}">
             <div class="row d-flex">
                 <div class="col-md-6 mt-2">
                     <div class="search">
                         <i class="fa fa-search"></i>
                         <input id="keyword" type="search" name="keyword" th:value="${keyword}" required class="form-control"
-                               placeholder="Saisissez une date (format yyyy-mm-dd)">
+                               placeholder="Saisissez une date ici (format yyy-mm-dd) ">
                         <button type="submit" class="btn btn-secondary">Chercher</button>
                     </div>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <button id="btnClear" class="btn btn-info">Nettoyer</button>
+                    <button id="btnClear" class="btn btn-info">Nettoyer la recherche</button>
                 </div>
             </div>
         </form>
     </div>
-
-    <!-- variable inseree dans Modele depuis le controler -->
     <div th:if="${stock.size() > 0}">
-        <table class="table table-hover table-responsive-xl">
+        <table class="table table-hover table-responsive-xl" >
             <thead class="thead-light">
             <tr>
                 <th scope="col">Id</th>
@@ -59,26 +56,17 @@
                 <th scope="col">Date de fabrication</th>
                 <th scop="col">Date de péremption</th>
                 <th scope="col">Statut</th>
-                <th scope="col">Editer</th>
             </tr>
             </thead>
             <tbody>
-            <tr  th:each="stock : ${stock}"  >
-                <th scope="row">[[${stock.id}]]</th>
+            <tr  th:each="stock : ${stock}">
+                <th scope="row" >[[${stock.id}]]</th>
                 <td>[[${stock.produitRef.nomProduit}]]</td>
                 <td>[[${stock.produitRef.categories.designation}]]</td>
-                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy')}]]</td>
-                <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">[[${stock.datePeremption}]]</td>
+                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy hh:mm:ss')}]]</td>
+                <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">&#9888;[[${stock.datePeremption}]] A traité</td>
                 <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
                 <td>[[${stock.statut}]]</td>
-
-                <td>
-                    <a th:href="@{'/stock/' + ${stock.id}}" title="Edit this stock's product"
-                       class="fa-regular fa-pen-to-square icon-dark"></a>
-                    &nbsp;
-                    <a th:href="@{'/stock/delete/' + ${stock.id}}" th:stockDesignation="${stock.produitRef.nomProduit}" id="btnDelete"
-                       title="Delete this stock's product" class="fa-regular fa-trash-can icon-dark btn-delete"></a>
-                </td>
             </tr>
             </tbody>
         </table>
@@ -88,50 +76,5 @@
         <span>No product found!</span>
     </div>
 </div>
-
-<div class="modal fade text-center" id="confirmModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <span id="confirmText"></span>
-            </div>
-
-            <div class="modal-footer">
-                <a type="button" id="yesBtn" class="btn btn-danger">Yes</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div th:replace="fragments/footer :: footer"></div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-      $(".btn-delete").on("click", function (e) {
-        e.preventDefault();
-        link = $(this);
-
-        stockDesignation = link.attr("stockDesignation");
-        $("#yesBtn").attr("href", link.attr("href"));
-        $("#confirmText").html("Voulez-vous supprimer le produit \<strong\>" + stockDesignation + "\<\/strong\>?");
-        $("#confirmModal").modal();
-      });
-
-      $("#btnClear").on("click", function (e) {
-        e.preventDefault();
-        $("#keyword").text("");
-        window.location = "[[@{/stock}]]";
-      });
-    });
-
-</script>
 </body>
 </html>

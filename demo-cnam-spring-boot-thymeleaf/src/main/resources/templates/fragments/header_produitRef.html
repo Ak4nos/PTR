@@ -1,4 +1,4 @@
-<header th:fragment="header_home">
+<header th:fragment="header_produitRef">
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <a class="navbar-brand" th:href="@{/home}">Accueil</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
@@ -11,14 +11,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/categories}">Catégories</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/stock}">Stock</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/utilisateur}">Utilisateur</a>
+                    <a class="nav-link" th:href="@{/produitRef/new}">Ajouter un produit de référence</a>
                 </li>
             </ul>
         </div>

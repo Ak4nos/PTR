@@ -103,8 +103,6 @@ public class StockController {
 
         try {
 
-
-
             stockrepository.save(stock);
 
 
