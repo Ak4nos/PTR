@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface HistoriqueStockRepository extends JpaRepository<HistoriqueStock, Integer> {
-    List<HistoriqueStock> findByDateCreation (Date dateCreation);
+    List<HistoriqueStock> findByDateCreation (Date keyword);
 }

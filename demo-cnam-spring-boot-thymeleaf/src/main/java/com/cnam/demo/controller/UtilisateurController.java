@@ -1,6 +1,7 @@
 package com.cnam.demo.controller;
 
-import com.cnam.demo.entity.*;
+import com.cnam.demo.entity.Role;
+import com.cnam.demo.entity.Utilisateur;
 import com.cnam.demo.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -12,11 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
-public class utilisateurController {
+public class UtilisateurController {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;

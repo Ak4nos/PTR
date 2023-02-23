@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Classe de création d'entité ou modèle stock
+ * Classe de création de l'entité stock
  */
 @Entity
 @Table(name = "stock")
@@ -44,7 +44,6 @@ public class Stock {
     public Stock() {
 
     }
-
 
     public Stock(Integer id, Date dateFabrication, Date datePeremption, ProduitRef produitRef, Categories categories, Statut statut) {
         this.id = id;
@@ -84,11 +83,6 @@ public class Stock {
 
     public void setProduitRef(ProduitRef produitRef) {
         this.produitRef = produitRef;
-    }
-
-    public int getValueOfProduitRef(){
-
-        return produitRef.getId();
     }
 
     public Statut getStatut() {

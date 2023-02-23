@@ -2,6 +2,9 @@ package com.cnam.demo.entity;
 
 import javax.persistence.*;
 
+/**
+ * Classe de création de l'entité utilisateur
+ */
 @Entity
 @Table(name = "utilisateur")
 public class Utilisateur {

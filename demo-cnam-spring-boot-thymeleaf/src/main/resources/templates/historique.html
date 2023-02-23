@@ -64,7 +64,7 @@
                 <td>[[${historiqueStock.stock.produitRef.nomProduit}]]</td>
                 <td>[[${historiqueStock.stock.produitRef.categories.designation}]]</td>
                 <td>[[${#dates.format(historiqueStock.dateCreation, 'dd/MM/yyyy hh:mm:ss')}]]</td>
-                <td>[[${historiqueStock.stock.datePeremption}]] A traité</td>
+                <td>[[${historiqueStock.stock.datePeremption}]]</td>
                 <td>[[${historiqueStock.stock.statut}]]</td>
             </tr>
             </tbody>
@@ -75,5 +75,27 @@
         <span>No product found!</span>
     </div>
 </div>
+<div th:replace="fragments/footer :: footer"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      $(".btn-delete").on("click", function (e) {
+        e.preventDefault();
+        link = $(this);
+
+        historiqueDesignation = link.attr("historiqueDesignation");
+        $("#yesBtn").attr("href", link.attr("href"));
+        $("#confirmText").html("Voulez-vous supprimer le produit \<strong\>" + historiqueDesignation + "\<\/strong\>?");
+        $("#confirmModal").modal();
+      });
+
+      $("#btnClear").on("click", function (e) {
+        e.preventDefault();
+        $("#keyword").text("");
+        window.location = "[[@{/historique}]]";
+      });
+    });
+
+</script>
 </body>
 </html>

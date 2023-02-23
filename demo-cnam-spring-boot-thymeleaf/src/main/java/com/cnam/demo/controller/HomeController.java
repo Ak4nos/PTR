@@ -1,6 +1,5 @@
 package com.cnam.demo.controller;
 
-import com.cnam.demo.entity.ProduitRef;
 import com.cnam.demo.entity.Statut;
 import com.cnam.demo.entity.Stock;
 import com.cnam.demo.repository.ProduitRefRepository;
@@ -14,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe controller pour HomeController
+ */
 @Controller
-public class homeController {
+public class HomeController {
 
     @Autowired
     private StockRepository stockrepository;

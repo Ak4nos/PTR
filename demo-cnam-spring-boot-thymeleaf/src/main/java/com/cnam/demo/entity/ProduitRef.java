@@ -6,6 +6,9 @@ import com.cnam.demo.entity.Categories;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de création de l'entité produitRef
+ */
 @Entity
 @Table(name = "produit_ref")
 public class ProduitRef {

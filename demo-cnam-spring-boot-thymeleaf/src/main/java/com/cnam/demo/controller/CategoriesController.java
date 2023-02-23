@@ -26,7 +26,6 @@ public class CategoriesController {
 
   @Autowired
   private CategoriesRepository categoriesRepository;
-
   @Autowired
   private ProduitRefRepository produitRefRepository;
 

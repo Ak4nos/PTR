@@ -63,7 +63,7 @@
             <tr th:each="produitRef : ${produitRef}">
                 <th scope="row">[[${produitRef.id}]]</th>
                 <td>[[${produitRef.nomProduit}]]</td>
-                <td>[[${produitRef.tempsConservation}]]</td>
+                <td>[[${produitRef.tempsConservation}]] heures</td>
                 <td>[[${produitRef.categories.designation}]]</td>
                 <td>
                     <a th:href="@{'/produitRef/' + ${produitRef.id}}" title="Edit this product"

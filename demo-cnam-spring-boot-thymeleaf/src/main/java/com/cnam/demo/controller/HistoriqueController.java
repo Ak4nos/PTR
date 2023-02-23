@@ -19,7 +19,7 @@ import java.util.List;
  * Classe controller pour l'HistoriqueStock
  */
 @Controller
-public class historiqueController {
+public class HistoriqueController {
 
     @Autowired
     private StockRepository stockrepository;
@@ -44,7 +44,6 @@ public class historiqueController {
             historiqueStockRepository.findAll().forEach(historiqueStock::add);
             } else {
                 historiqueStockRepository.findByDateCreation(keyword).forEach(historiqueStock::add);
-
                 model.addAttribute("keyword", keyword);
             }
             model.addAttribute("produitRef", produitRef);

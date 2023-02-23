@@ -13,6 +13,5 @@ import java.util.List;
 @Transactional
 public interface ProduitRefRepository extends JpaRepository<ProduitRef, Integer> {
     List<ProduitRef> findByNomProduitContainingIgnoreCase(String keyword);
-    List<ProduitRef> findByCategories(Integer id);
 
 }
