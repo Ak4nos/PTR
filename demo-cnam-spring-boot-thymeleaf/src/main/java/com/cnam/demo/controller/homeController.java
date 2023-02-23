@@ -26,14 +26,7 @@ public class homeController {
     public String getAllAccueil (Model model, @Param("keyword") String keyword) {
         try {
             List<Stock> stock = new ArrayList<Stock>();
-
-            List<ProduitRef> produitRef = new ArrayList<ProduitRef>();
-            List<Statut> statut = new ArrayList<>();
-
-                stockrepository.findByStatut(Statut.EN_COURS).forEach(stock::add);
-
-                //stockrepository.findAll().forEach(stock::add);
-
+            stockrepository.findByStatut(Statut.EN_COURS).forEach(stock::add);
             model.addAttribute("stock", stock);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());

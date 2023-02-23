@@ -1,9 +1,11 @@
 package com.cnam.demo.controller;
 
 
+import com.cnam.demo.entity.HistoriqueStock;
 import com.cnam.demo.entity.ProduitRef;
 import com.cnam.demo.entity.Statut;
 import com.cnam.demo.entity.Stock;
+import com.cnam.demo.repository.HistoriqueStockRepository;
 import com.cnam.demo.repository.ProduitRefRepository;
 import com.cnam.demo.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +33,14 @@ public class StockController {
     @Autowired
     private ProduitRefRepository produitRefRepository;
 
+    @Autowired
+    private HistoriqueStockRepository historiqueStockRepository;
+
     /**
-     * Classe qui capte la méthode gett de la page stock et affiche le stock
+     * Méthode qui capte la méthode get de la page stock et affiche le stock
      * @param model sert à stocker l'entité stock afin d'exploiter l'entité
-     * @param keyword sert à réaliser une recherche par date
-     * @return
+     * @param keyword sert à capter les entrées de l'utilisateur pour réaliser une recherche par date
+     * @return la page stock.html
      */
 
     @GetMapping("/stock")
@@ -43,7 +48,6 @@ public class StockController {
         try {
             List<Stock> stock = new ArrayList<Stock>();
 
-            List<ProduitRef> produitRef = new ArrayList<ProduitRef>();
             if (keyword == null) {
                 stockrepository.findAll().forEach(stock::add);
             } else {
@@ -51,9 +55,7 @@ public class StockController {
                 model.addAttribute("keyword", keyword);
             }
 
-                model.addAttribute("stock", stock);
-
-                model.addAttribute("produitRef", produitRef);
+            model.addAttribute("stock", stock);
 
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -62,7 +64,11 @@ public class StockController {
         return "stock";
     }
 
-
+    /**
+     * Méthode qui capte la méthode get afin d'afficher le formulaire de création d'un produit dans le stock
+     * @param model
+     * @return la page stock_form
+     */
     @GetMapping("/stock/new")
     public String addProduitStock(Model model) {
 
@@ -77,6 +83,12 @@ public class StockController {
         return "stock_form";
     }
 
+    /**
+     * Méthode qui capte la méthode post pour sauvegarder le modèle en base
+     * @param stock modèle contenant les données de l'entité
+     * @param redirectAttributes redirige les attributs des modèles
+     * @return redirige vers la page stock.html
+     */
     @PostMapping("/stock/save")
     public String saveProduitStock(Stock stock,  RedirectAttributes redirectAttributes) {
 
@@ -98,13 +110,20 @@ public class StockController {
         return "redirect:/stock";
     }
 
-   @PostMapping("/stock/saveEdit")
-    public String saveProduitStockEdit(Stock stock, RedirectAttributes redirectAttributes) {
+    /**
+     * Méthode qui capte la méthode post pour sauvegarder la modification du statut du modèle en base
+     * @param stock modèle contenant les données de l'entité
+     * @param redirectAttributes récupère le modèle de la méthode editProduitStock
+     * @return la page stock.html
+     */
+    @PostMapping("/stock/saveEdit")
+    public String saveProduitStockEdit( Stock stock, HistoriqueStock historiqueStock, RedirectAttributes redirectAttributes) {
 
         try {
-
+            historiqueStock.setDateCreation(stock.getDateFabrication());
+            historiqueStock.setStock(stock);
+            historiqueStockRepository.save(historiqueStock);
             stockrepository.save(stock);
-
 
             redirectAttributes.addFlashAttribute("message", "The Product has been saved successfully!");
         } catch (Exception e) {
@@ -115,24 +134,23 @@ public class StockController {
     }
 
     /**
-     * {id} id c'est un parametre de l'URL
+     * {id} id c'est un parametre de l'URL, la méthode permet d'éditer le statut
      * @param id
      * @param model
      * @param redirectAttributes
-     * @return
+     * @return stock_form_edit.html si le modèle existe sinon redirige vers la page stock.html
      */
     @GetMapping("/stock/{id}")
     public String editProduitStock(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
 
-            List<ProduitRef> listProduitRef = produitRefRepository.findAll();
             List<Statut> statut = new ArrayList<Statut>();
-
+            List<HistoriqueStock> historiqueStock= new ArrayList<>();
 
             Stock stock = stockrepository.findById(id).get();
             model.addAttribute("stock", stock);
+            model.addAttribute("historiqueStock", historiqueStock);
             model.addAttribute("statut", statut);
-            model.addAttribute("listProduitRef", listProduitRef);
             model.addAttribute("pageTitle", "Modifier le statut du produit de référence (ID: " + id + ")");
 
             return "stock_form_edit";
@@ -144,9 +162,16 @@ public class StockController {
         }
     }
 
+    /**
+     * {id} id c'est un parametre de l'URL, la méthode supprime un produit du stock
+     * @param id
+     * @param redirectAttributes
+     * @return supprime le produit et redirige vers stock.html
+     */
     @GetMapping("/stock/delete/{id}")
-    public String deleteProduitStock(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteProduitStock(@PathVariable("id") Integer id, Stock stock, ProduitRef produitRef,RedirectAttributes redirectAttributes) {
         try {
+
             stockrepository.deleteById(id);
 
             redirectAttributes.addFlashAttribute("message", "The product with id=" + id + " has been deleted successfully!");
@@ -156,6 +181,4 @@ public class StockController {
 
         return "redirect:/stock";
     }
-
-
 }

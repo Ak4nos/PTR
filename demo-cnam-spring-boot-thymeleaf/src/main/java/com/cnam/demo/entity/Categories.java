@@ -1,6 +1,8 @@
 package com.cnam.demo.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -16,17 +18,20 @@ public class Categories {
   @Column(length = 256)
   private String description;
 
-  @Column
-  private boolean published;
+  @OneToMany(
+          mappedBy = "categories",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+    List<ProduitRef> produitRefList = new ArrayList<>();
 
   public Categories() {
 
   }
 
-  public Categories(String designation, String description, boolean published) {
+  public Categories(String designation, String description) {
     this.designation = designation;
     this.description = description;
-    this.published = published;
   }
 
   public Integer getId() {
@@ -53,17 +58,11 @@ public class Categories {
     this.description = description;
   }
 
-  public boolean isPublished() {
-    return published;
-  }
 
-  public void setPublished(boolean published) {
-    this.published = published;
-  }
 
   @Override
   public String toString() {
-    return "Categories [id=" + id + ", designation=" + designation + ", description=" + description + ", published=" + published + "]";
+    return "Categories [id=" + id + ", designation=" + designation + ", description=" + description + "]";
   }
 
 }

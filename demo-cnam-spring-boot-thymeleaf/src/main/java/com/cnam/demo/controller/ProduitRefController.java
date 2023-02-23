@@ -14,9 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Classe controller pour la page produitRef
+ */
 @Controller
-
 public class ProduitRefController {
 
     @Autowired
@@ -24,6 +25,12 @@ public class ProduitRefController {
     @Autowired
     private CategoriesRepository categoriesRepository;
 
+    /**
+     * Méthode qui capte le get pour afficher tous les produits de références
+     * @param model sert à stocker l'entité produitRef afin d'exploiter l'entité
+     * @param keyword sert à capter les entrées de l'utilisateur pour réaliser une recherche
+     * @return produitRef.html
+     */
 
     @GetMapping("/produitRef")
     public String getAllProduitRef(Model model, @Param("keyword") String keyword) {
@@ -47,12 +54,16 @@ public class ProduitRefController {
         return "produitRef";
     }
 
+    /**
+     * Méthode qui capte le get pour afficher la page formulaire de création d'un produit de référence
+     * @param model sert à stocker l'entité afin de l'exploiter
+     * @return produitRef_form
+     */
     @GetMapping("/produitRef/new")
     public String addProduitRef(Model model) {
         List<Categories> listCategories = categoriesRepository.findAll();
 
         ProduitRef produitRef = new ProduitRef();
-        produitRef.setPublished(true);
 
         model.addAttribute("produitRef", produitRef);
         model.addAttribute("listCategories", listCategories);
@@ -61,6 +72,12 @@ public class ProduitRefController {
         return "produitRef_form";
     }
 
+    /**
+     * Méthode qui capte la méthode post pour sauvegarder le modèle en base
+     * @param produitRef modèle contenant les données de l'entité
+     * @param redirectAttributes redirige les attributs des modèles
+     * @return redirige vers la page produitRef.html
+     */
     @PostMapping("/produitRef/save")
     public String saveProduitRef(ProduitRef produitRef, RedirectAttributes redirectAttributes) {
 
@@ -76,11 +93,11 @@ public class ProduitRefController {
     }
 
     /**
-     * {id} id c'est un parametre de l'URL
+     * {id} id c'est un parametre de l'URL, capte le get pour éditer le statut
      * @param id
      * @param model
      * @param redirectAttributes
-     * @return
+     * @return produitref_form.html si le produit existe, redirige vers produitref.html sinon avec un message
      */
     @GetMapping("/produitRef/{id}")
     public String editProduitRef(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
@@ -101,34 +118,24 @@ public class ProduitRefController {
         }
     }
 
+    /**
+     * {id} id c'est un parametre de l'URL, la méthode supprime un produit du stock
+     * @param id
+     * @param redirectAttributes
+     * @return vers la page produitRef.html
+     */
     @GetMapping("/produitRef/delete/{id}")
-    public String deleteProduitRef(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteProduitRef(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
-            produitRefRepository.deleteById(id);
 
-            redirectAttributes.addFlashAttribute("message", "The product with id=" + id + " has been deleted successfully!");
+                produitRefRepository.deleteById(id);
+
+                redirectAttributes.addFlashAttribute("message", "The product with id=" + id + " has been deleted successfully!");
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
 
         return "redirect:/produitRef";
     }
-
-    @GetMapping("/produitRef/{id}/published/{status}")
-    public String updateProduitRefPublishedStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean published,
-                                                Model model, RedirectAttributes redirectAttributes) {
-        try {
-            produitRefRepository.updatePublishedStatus(id, published);
-
-            String status = published ? "published" : "disabled";
-            String message = "The product id=" + id + " has been " + status;
-
-            redirectAttributes.addFlashAttribute("message", message);
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-        }
-
-        return "redirect:/produitRef";
-    }
-
 }

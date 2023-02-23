@@ -3,6 +3,9 @@ package com.cnam.demo.entity;
 import javax.persistence.*;
 import com.cnam.demo.entity.Categories;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "produit_ref")
 public class ProduitRef {
@@ -17,21 +20,28 @@ public class ProduitRef {
     @Column(nullable = false)
     private int tempsConservation;
 
-    @Column
-    private boolean published;
-
-    @ManyToOne
+    @ManyToOne (
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinColumn (name = "categories_id")
     private Categories categories;
 
+    @OneToMany(
+            mappedBy = "produitRef",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    List<Stock> stockList = new ArrayList<>();
 
     public ProduitRef() {
     }
 
-    public ProduitRef(String nomProduit, int tempsConservation, boolean published) {
+    public ProduitRef(String nomProduit, int tempsConservation) {
         this.nomProduit = nomProduit;
         this.tempsConservation = tempsConservation;
-        this.published = published;
     }
 
     public Integer getId() {
@@ -58,14 +68,6 @@ public class ProduitRef {
         this.tempsConservation = tempsConservation;
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
     public Categories getCategories() {
         return categories;
     }
@@ -74,13 +76,17 @@ public class ProduitRef {
         this.categories = categories;
     }
 
+    public int getValueOfCategories(){
+
+        return categories.getId();
+    }
+
     @Override
     public String toString() {
         return "ProduitRef{" +
                 "id=" + id +
                 ", nomProduit='" + nomProduit + '\'' +
                 ", tempsConservation=" + tempsConservation +
-                ", published=" + published +
                 ", categories=" + categories +
                 '}';
     }

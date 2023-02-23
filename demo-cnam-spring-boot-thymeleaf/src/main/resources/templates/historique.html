@@ -46,7 +46,7 @@
             </div>
         </form>
     </div>
-    <div th:if="${stock.size() > 0}">
+    <div th:if="${historiqueStock.size() > 0}">
         <table class="table table-hover table-responsive-xl" >
             <thead class="thead-light">
             <tr>
@@ -59,20 +59,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr  th:each="stock : ${stock}">
-                <th scope="row" >[[${stock.id}]]</th>
-                <td>[[${stock.produitRef.nomProduit}]]</td>
-                <td>[[${stock.produitRef.categories.designation}]]</td>
-                <td>[[${#dates.format(stock.dateFabrication, 'dd/MM/yyyy hh:mm:ss')}]]</td>
-                <td th:if="${stock.datePeremption.before(#dates.createNow())}" style="color : red;">&#9888;[[${stock.datePeremption}]] A traité</td>
-                <td th:if="${stock.datePeremption.after(#dates.createNow())}" style="color : black;">[[${stock.datePeremption}]]</td>
-                <td>[[${stock.statut}]]</td>
+            <tr  th:each="historiqueStock : ${historiqueStock}">
+                <th scope="row" >[[${historiqueStock.id}]]</th>
+                <td>[[${historiqueStock.stock.produitRef.nomProduit}]]</td>
+                <td>[[${historiqueStock.stock.produitRef.categories.designation}]]</td>
+                <td>[[${#dates.format(historiqueStock.dateCreation, 'dd/MM/yyyy hh:mm:ss')}]]</td>
+                <td>[[${historiqueStock.stock.datePeremption}]] A traité</td>
+                <td>[[${historiqueStock.stock.statut}]]</td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="" th:unless="${stock.size() > 0}">
+    <div class="" th:unless="${historiqueStock.size() > 0}">
         <span>No product found!</span>
     </div>
 </div>

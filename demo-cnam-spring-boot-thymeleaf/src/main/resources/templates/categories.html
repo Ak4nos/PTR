@@ -56,7 +56,6 @@
             <th scope="col">Id</th>
             <th scope="col">Designation</th>
             <th scope="col">Description</th>
-            <th scope="col">Published</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -65,12 +64,6 @@
             <th scope="row">[[${categories.id}]]</th>
             <td>[[${categories.designation}]]</td>
             <td>[[${categories.description}]]</td>
-            <td>
-              <a th:if="${categories.published == true}" class="fa-regular fa-square-check"
-                th:href="@{'/categories/' + ${categories.id} + '/published/false'}" title="Disable this categories"></a>
-              <a th:if="${categories.published == false}" class="fa-regular fa-square icon-dark"
-                th:href="@{'/categories/' + ${categories.id} + '/published/true'}" title="Enable this categories"></a>
-            </td>
             <td>
               <a th:href="@{'/categories/' + ${categories.id}}" title="Edit this categories"
                 class="fa-regular fa-pen-to-square icon-dark"></a>

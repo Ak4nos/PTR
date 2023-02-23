@@ -6,6 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Classe de création d'entité ou modèle stock
+ */
 @Entity
 @Table(name = "stock")
 public class Stock {
@@ -26,11 +29,17 @@ public class Stock {
     @Column (name="statut")
     @Enumerated (EnumType.STRING)
     private Statut statut = Statut.EN_COURS;
-
-    @ManyToOne
+    /**
+     * Permet la suppression en cascade
+     */
+    @ManyToOne(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinColumn(name = "produitRef_id")
     private ProduitRef produitRef;
-
 
     public Stock() {
 
@@ -77,7 +86,10 @@ public class Stock {
         this.produitRef = produitRef;
     }
 
+    public int getValueOfProduitRef(){
 
+        return produitRef.getId();
+    }
 
     public Statut getStatut() {
         return statut;

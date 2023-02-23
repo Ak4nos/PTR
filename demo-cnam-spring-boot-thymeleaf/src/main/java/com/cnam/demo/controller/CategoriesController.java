@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cnam.demo.entity.Categories;
+import com.cnam.demo.entity.ProduitRef;
+import com.cnam.demo.entity.Stock;
 import com.cnam.demo.repository.CategoriesRepository;
+import com.cnam.demo.repository.ProduitRefRepository;
+import com.cnam.demo.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -14,12 +18,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Classe controller pour les catégories
+ */
 @Controller
 public class CategoriesController {
 
   @Autowired
   private CategoriesRepository categoriesRepository;
 
+  @Autowired
+  private ProduitRefRepository produitRefRepository;
+
+  /**
+   * Méthode qui capte la méthode get de la page catégories et affiche les catégories
+   * @param model sert à stocker l'entité Categories afin d'exploiter l'entité
+   * @param keyword sert à capter les entrées de l'utilisateur pour réaliser une recherche par désignation
+   * @return
+   */
   @GetMapping("/categories")
   public String getAll(Model model, @Param("keyword") String keyword) {
     try {
@@ -40,17 +56,26 @@ public class CategoriesController {
     return "categories";
   }
 
+  /**
+   * Méthode qui capte la méthode get afin d'afficher le formulaire de création de catégories
+   * @param model
+   * @return la page categories_form.html
+   */
   @GetMapping("/categories/new")
   public String addCategories(Model model) {
     Categories categories = new Categories();
-    categories.setPublished(true);
 
     model.addAttribute("categories", categories);
     model.addAttribute("pageTitle", "Création d'une catégorie");
 
     return "categories_form";
   }
-
+  /**
+   * Méthode qui capte la méthode post pour sauvegarder le modèle en base
+   * @param categories modèle contenant les données de l'entité
+   * @param redirectAttributes récupère le modèle de la méthode addCategories
+   * @return la page categories.html
+   */
   @PostMapping("/categories/save")
   public String saveCategories(Categories categories, RedirectAttributes redirectAttributes) {
     try {
@@ -65,11 +90,11 @@ public class CategoriesController {
   }
 
   /**
-   * {id} id c'est un parametre de l'URL
+   * {id} id c'est un parametre de l'URL, la méthode permet d'éditer la categorie
    * @param id
    * @param model
    * @param redirectAttributes
-   * @return
+   * @return redirige vers la page categories.html
    */
   @GetMapping("/categories/{id}")
   public String editCategories(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
@@ -88,33 +113,15 @@ public class CategoriesController {
   }
 
   @GetMapping("/categories/delete/{id}")
-  public String deleteCategories(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+  public String deleteCategories(@PathVariable("id") Integer id, Model model , Categories categories, RedirectAttributes redirectAttributes) {
     try {
-      categoriesRepository.deleteById(id);
-     /// tutorialRepository.findByDescriptionProduct("kkk");
 
-      redirectAttributes.addFlashAttribute("message", "The Categories with id=" + id + " has been deleted successfully!");
+        categoriesRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("message", "The Categories with id=" + id + " has been deleted successfully!");
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
-
-    return "redirect:/categories";
-  }
-
-  @GetMapping("/categories/{id}/published/{status}")
-  public String updateCategoriesPublishedStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean published,
-      Model model, RedirectAttributes redirectAttributes) {
-    try {
-      categoriesRepository.updatePublishedStatus(id, published);
-
-      String status = published ? "published" : "disabled";
-      String message = "The Categories id=" + id + " has been " + status;
-
-      redirectAttributes.addFlashAttribute("message", message);
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("message", e.getMessage());
-    }
-
     return "redirect:/categories";
   }
 }

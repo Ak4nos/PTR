@@ -1,8 +1,8 @@
 package com.cnam.demo.controller;
 
-import com.cnam.demo.entity.ProduitRef;
-import com.cnam.demo.entity.Statut;
-import com.cnam.demo.entity.Stock;
+import com.cnam.demo.entity.*;
+import com.cnam.demo.repository.CategoriesRepository;
+import com.cnam.demo.repository.HistoriqueStockRepository;
 import com.cnam.demo.repository.ProduitRefRepository;
 import com.cnam.demo.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +15,42 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Classe controller pour l'HistoriqueStock
+ */
 @Controller
 public class historiqueController {
 
     @Autowired
     private StockRepository stockrepository;
     @Autowired
+    private HistoriqueStockRepository historiqueStockRepository;
+    @Autowired
+    private CategoriesRepository categoriesRepository;
+    @Autowired
     private ProduitRefRepository produitRefRepository;
 
     @GetMapping("/historique")
     public String getHistorique (Model model, @Param("keyword") Date keyword) {
         try {
-            List<Stock> stock = new ArrayList<Stock>();
-
+            List<HistoriqueStock> historiqueStock = new ArrayList<HistoriqueStock>();
             List<ProduitRef> produitRef = new ArrayList<ProduitRef>();
-            List<Statut> statut = new ArrayList<>();
+            List<Categories> categories = new ArrayList<Categories>();
+
+            produitRefRepository.findAll().forEach(produitRef::add);
+            categoriesRepository.findAll().forEach(categories::add);
+
             if (keyword == null) {
-            stockrepository.findByStatut(Statut.JETE).forEach(stock::add);
-            stockrepository.findByStatut(Statut.CONSOMME).forEach(stock::add);
+            historiqueStockRepository.findAll().forEach(historiqueStock::add);
             } else {
-                stockrepository.findByDateFabrication(keyword).forEach(stock::add);
+                historiqueStockRepository.findByDateCreation(keyword).forEach(historiqueStock::add);
+
                 model.addAttribute("keyword", keyword);
             }
-            model.addAttribute("stock", stock);
+            model.addAttribute("produitRef", produitRef);
+            model.addAttribute("categories", categories);
+            model.addAttribute("historiqueStock", historiqueStock);
+
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }

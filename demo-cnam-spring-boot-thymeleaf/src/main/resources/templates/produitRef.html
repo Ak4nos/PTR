@@ -56,7 +56,6 @@
                 <th scope="col">Nom du produit</th>
                 <th scope="col">Temps de conservation (en heure)</th>
                 <th scop="col">Catégorie</th>
-                <th scope="col">Publier</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -66,12 +65,6 @@
                 <td>[[${produitRef.nomProduit}]]</td>
                 <td>[[${produitRef.tempsConservation}]]</td>
                 <td>[[${produitRef.categories.designation}]]</td>
-                <td>
-                    <a th:if="${produitRef.published == true}" class="fa-regular fa-square-check"
-                       th:href="@{'/produitRef/' + ${produitRef.id} + '/published/false'}" title="Disable this product"></a>
-                    <a th:if="${produitRef.published == false}" class="fa-regular fa-square icon-dark"
-                       th:href="@{'/produitRef/' + ${produitRef.id} + '/published/true'}" title="Enable this product"></a>
-                </td>
                 <td>
                     <a th:href="@{'/produitRef/' + ${produitRef.id}}" title="Edit this product"
                        class="fa-regular fa-pen-to-square icon-dark"></a>

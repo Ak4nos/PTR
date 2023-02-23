@@ -15,7 +15,5 @@ import org.springframework.stereotype.Repository;
 public interface CategoriesRepository extends JpaRepository<Categories, Integer> {
   List<Categories> findByDesignationContainingIgnoreCase(String keyword);
 
-  @Query("UPDATE Categories t SET t.published = :published WHERE t.id = :id")
-  @Modifying
-  public void updatePublishedStatus(Integer id, boolean published);
+
 }

@@ -13,9 +13,6 @@ import java.util.List;
 @Transactional
 public interface ProduitRefRepository extends JpaRepository<ProduitRef, Integer> {
     List<ProduitRef> findByNomProduitContainingIgnoreCase(String keyword);
-
-   @Query("UPDATE ProduitRef p SET p.published = :published WHERE p.id = :id")
-    @Modifying
-    public void updatePublishedStatus(Integer id, boolean published);
+    List<ProduitRef> findByCategories(Integer id);
 
 }
